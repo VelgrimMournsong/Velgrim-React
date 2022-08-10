@@ -1,6 +1,8 @@
 # Velgrim-React
 A collection of open source React libraries
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 ## Libraries
 ### @velgrim/testing
 An opinionated react testing library with several dependencies intended exclusively for testing Velgrim libraries.
