@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "declarationMap": true,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        // "jsx": "react-jsx",
+        "jsx": "preserve",
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitOverride": true,
+        "outDir": "dist",
+        "preserveSymlinks": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es6",
+        "baseUrl": ".",
+        "paths": {
+//            "@archspark/util": ["../../node_modules/@archspark/util"]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

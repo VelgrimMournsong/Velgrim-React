@@ -1,0 +1,77 @@
+{
+    "name": "@velgrim/testing",
+    "version": "1.1.1",
+    "author": "Declan D'Arcy",
+    "description": "An opinionated react testing library with several dependencies intended exclusively for testing Velgrim libraries.",
+    "license": "MIT",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/velgrimmournsong/velgrim-react"
+    },
+    "scripts": {
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "build-package:dev": "webpack --mode development",
+        "build-package:prod": "webpack --mode production"
+    },
+    "resolutions": {
+        "@types/react": "18.0.14",
+        "@types/react-dom": "18.0.5"
+    },
+    "devDependencies": {
+        "@types/babel__preset-env": "^7.9.2",
+        "@types/jest": "^27.5.1",
+        "@types/node": "^17.0.33",
+        "@types/react": "18.0.14",
+        "@types/react-dom": "18.0.5",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "typescript": "^4.6.4"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+    },
+    "dependencies": {
+        "@babel/core": "^7.17.10",
+        "@babel/plugin-proposal-decorators": "^7.17.9",
+        "@babel/plugin-transform-runtime": "^7.17.10",
+        "@babel/preset-env": "^7.17.10",
+        "@babel/preset-react": "^7.16.7",
+        "@babel/preset-typescript": "^7.16.7",
+        "@emotion/babel-plugin": "^11.9.2",
+        "@emotion/babel-preset-css-prop": "^11.2.0",
+        "@emotion/jest": "^11.9.1",
+        "@emotion/react": "^11.9.0",
+        "@storybook/addon-essentials": "next",
+        "@storybook/addon-storyshots": "next",
+        "@storybook/addon-storysource": "next",
+        "@storybook/addons": "next",
+        "@storybook/api": "next",
+        "@storybook/cli": "next",
+        "@storybook/components": "next",
+        "@storybook/core-events": "next",
+        "@storybook/react": "next",
+        "@storybook/theming": "next",
+        "@testing-library/dom": "^8.13.0",
+        "@testing-library/jest-dom": "^5.16.4",
+        "@testing-library/react": "^13.2.0",
+        "@testing-library/react-hooks": "^8.0.0",
+        "@testing-library/user-event": "^14.2.0",
+        "babel-jest": "^27.5.1",
+        "babel-loader": "^8.0.0",
+        "babel-preset-react-app": "^10.0.0",
+        "camelcase": "^5.3.1",
+        "cross-env": "^7.0.3",
+        "jest": "^27.5.1",
+        "preact": "^10.7.2",
+        "react-app-polyfill": "^3.0.0",
+        "require-from-string": "^2.0.2",
+        "storybook-dark-mode": "latest",
+        "ts-jest": "^27.1.4",
+        "ts-node": "^10.4.0",
+        "webpack": "4"
+    }
+}

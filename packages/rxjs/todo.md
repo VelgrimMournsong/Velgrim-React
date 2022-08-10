@@ -1,0 +1,4 @@
+- identify redundancies between components
+- identify obsolete files
+- write new readme.md
+- add comments to publicly exposed APIs

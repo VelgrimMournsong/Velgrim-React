@@ -1,0 +1,13 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "jsx": "react-jsx"
+    },
+    "exclude": [
+        "__hooks__",
+        "__util__",
+        "spec/**/*",
+        "stories/**/*",
+        ".storybook/**/*"
+    ]
+}
