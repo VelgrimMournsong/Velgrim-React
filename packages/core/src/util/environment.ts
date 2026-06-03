@@ -5,11 +5,20 @@ import { cast } from './objects';
 import { isUppercase } from './casing';
 import { last } from './collections';
 
-const isReactEnvironment = !!process.env['REACT_APP_ENVIRONMENT'];
+type EnvironmentVariables = Record<string, string | undefined>;
+type ProcessGlobal = typeof globalThis & {
+    process?: {
+        env?: EnvironmentVariables
+    }
+};
+
+const environmentVariables: EnvironmentVariables = (globalThis as ProcessGlobal).process?.env ?? {};
+
+const isReactEnvironment = !!environmentVariables['REACT_APP_ENVIRONMENT'];
 
 const isDevelopment = isReactEnvironment
-    ? process.env['REACT_APP_ENVIRONMENT'] === 'development'
-    : process.env['ENVIRONMENT'] === 'development';
+    ? environmentVariables['REACT_APP_ENVIRONMENT'] === 'development'
+    : environmentVariables['ENVIRONMENT'] === 'development';
 
 const get = <T>(name: string) => {
     let formattedName: string | undefined;
@@ -17,7 +26,7 @@ const get = <T>(name: string) => {
 
     try {
         formattedName = formatEnvironmentVariableName(name);
-        value = process.env[formattedName!];
+        value = environmentVariables[formattedName!];
     }
     catch (ex: any) {
         console.log({ ex });
@@ -36,7 +45,7 @@ const getRequired = <T>(name: string) => {
 
     try {
         formattedName = formatEnvironmentVariableName(name);
-        value = process.env[formattedName!];
+        value = environmentVariables[formattedName!];
     }
     catch (ex: any) {
         console.log({ ex });
@@ -51,7 +60,7 @@ const getRequired = <T>(name: string) => {
 
 const getNumber = (name: string) => {
     const formattedName = formatEnvironmentVariableName(name);
-    const value = process.env[formattedName];
+    const value = environmentVariables[formattedName];
 
     if (!value) {
         return undefined;
@@ -72,7 +81,7 @@ const getRequiredNumber = (name: string) => {
 
     try {
         formattedName = formatEnvironmentVariableName(name);
-        value = process.env[formattedName!];
+        value = environmentVariables[formattedName!];
     }
     catch (ex: any) {
         console.log({ ex });
@@ -100,7 +109,7 @@ const getRequiredNumber = (name: string) => {
 
 const getString = (name: string) => {
     const formattedName = formatEnvironmentVariableName(name);
-    const value = process.env[formattedName];
+    const value = environmentVariables[formattedName];
 
     if (value) {
         return value;
@@ -115,7 +124,7 @@ const getRequiredString = (name: string) => {
 
     try {
         formattedName = formatEnvironmentVariableName(name);
-        value = process.env[formattedName!];
+        value = environmentVariables[formattedName!];
     }
     catch (ex: any) {
         console.log({ ex });
@@ -133,7 +142,7 @@ const set = (name: string, value: number | string | any) => {
 
     try {
         formattedName = formatEnvironmentVariableName(name);
-        process.env[formattedName!] = typeof value === 'string' ? value : value.toString();
+        environmentVariables[formattedName!] = typeof value === 'string' ? value : value.toString();
     }
     catch (ex: any) {
         throw new Error(

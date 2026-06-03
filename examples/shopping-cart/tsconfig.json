@@ -1,35 +1,31 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "declaration": true,
-        "declarationMap": true,
         "downlevelIteration": true,
         "esModuleInterop": true,
-        "experimentalDecorators": true,
-        // "jsx": "react-jsx",
-        "jsx": "preserve",
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "jsx": "react-jsx",
         "lib": [
-            "ESNext",
-            "DOM"
+            "DOM",
+            "DOM.Iterable",
+            "ES2020"
         ],
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
         "noImplicitOverride": true,
-        "outDir": "dist",
-        "preserveSymlinks": true,
+        "noEmit": true,
         "resolveJsonModule": true,
         "skipLibCheck": true,
-        "sourceMap": true,
-        //
         "strict": true,
-        "target": "es6",
-        "baseUrl": ".",
-        "paths": {
-//            "@archspark/hooks": ["../../node_modules/@archspark/hooks"],
-//            "@archspark/util": ["../../node_modules/@archspark/util"]
-        }
+        "target": "ES2020",
+        "types": [
+            "vite/client"
+        ],
+        "useDefineForClassFields": true
     },
     "include": [
-        "src/**/*"
+        "src",
+        "vite.config.ts"
     ]
 }

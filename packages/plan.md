@@ -15,7 +15,7 @@
 - Prefer proving correctness with tests before changing implementation, especially for `useInsertionEffect`, `useSyncExternalStore`, and StrictMode behavior.
 - Preserve public APIs unless a migration blocker requires a change.
 - When a public API change is unavoidable, document the reason, the replacement path, and the compatibility impact before implementing it.
-- After commit `10b6a2f`, do not continue execution until explicitly instructed. The library migration is a validated foundation for Fixture Manager.
+- After the shopping-cart Vite migration, do not continue execution until explicitly instructed. The migrated libraries and example are a validated foundation for Fixture Manager.
 
 1. React 19 compatibility
 2. `@velgrim/testing` modernization
@@ -30,6 +30,7 @@
 ## Current state
 
 - Commit `10b6a2f` completed and pushed the React 19 library migration.
+- The follow-up `examples/shopping-cart` migration has now been completed with Vite instead of webpack 5.
 - Root `pnpm-workspace.yaml` and root `pnpm-lock.yaml` exist.
 - Package-local lockfiles were removed.
 - `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs` use React 19-compatible dependencies and React peer range `^18.3.1 || ^19.0.0`.
@@ -37,7 +38,10 @@
 - TypeScript configs use `"jsx": "react-jsx"`.
 - `@velgrim/core` has real build/typecheck scripts and no longer depends on `uuid`.
 - `@velgrim/rxjs` uses `useLayoutEffect` for subscription lifecycle management, with StrictMode and Fixture Manager critical-path coverage.
-- Root `pnpm test`, `pnpm typecheck`, and `pnpm build` passed through `pnpm@11.5.1`.
+- `examples/shopping-cart` uses Vite 8, React 19, workspace dependencies on `@velgrim/core` and `@velgrim/rxjs`, and Vite dependency prebundling for the linked CommonJS workspace packages.
+- `@velgrim/core` no longer assumes a Node `process` global during `Environment` module evaluation, which was required for browser package consumption through Vite.
+- Root `pnpm test`, `pnpm typecheck`, `pnpm build`, and `pnpm --filter shopping-cart build` passed through `pnpm@11.5.1`.
+- Browser smoke for `examples/shopping-cart` passed on `http://127.0.0.1:3001/`: initial render had no fresh console errors and add-to-cart updated cart state.
 
 ## Target version snapshot
 
@@ -299,7 +303,7 @@ Do this package first because it owns shared Jest transforms and render helpers.
    - publish ESM-only packages as a major release
    - keep CommonJS output and replace ESM-only dependencies with local helpers or platform APIs
 
-   Decision after commit `10b6a2f`: defer `exports` until Fixture Manager consumes the migrated packages successfully. Preferred eventual direction is dual ESM/CJS, but do not implement it yet.
+   Decision after the shopping-cart Vite migration: defer `exports` until Fixture Manager consumes the migrated packages successfully. Preferred eventual direction is dual ESM/CJS, but do not implement it yet. The Vite example currently handles linked CommonJS packages with dependency prebundling.
 
 5. Add package `exports` once output is defined:
 
@@ -379,14 +383,20 @@ pnpm build
 
 ## Example app follow-up
 
-After the packages pass on React 19, migrate `examples/shopping-cart` separately.
+Completed after the packages passed on React 19.
 
-- Replace its package references with workspace packages while developing locally.
-- Upgrade React and React DOM to `19.2.7`.
-- Replace the copied CRA/webpack 4 toolchain with Vite.
-- Regenerate the example lockfile from the root pnpm workspace.
-- Use it as a smoke test for published package behavior rather than blocking the library migration on app-tooling churn.
+- Package references were replaced with workspace packages while developing locally.
+- React and React DOM were upgraded to `19.2.7`.
+- The copied CRA/webpack 4 toolchain was replaced with Vite.
+- The root pnpm lockfile was regenerated; no example-local lockfile is used.
+- Vite dev prebundles `@velgrim/core` and `@velgrim/rxjs` so the linked CommonJS packages are consumed as dependencies.
+- The example caught and drove a package fix: `@velgrim/core` `Environment` no longer requires a browser `process` shim at module load.
 - Do not migrate to webpack 5 unless the example explicitly becomes a webpack compatibility target.
+
+Next consumer follow-up:
+
+- Use Fixture Manager as the next real consumer before changing package `exports` or runtime semantics.
+- If Fixture Manager also needs bundler-specific handling for the current CommonJS output, decide whether to move package output to dual ESM/CJS with explicit `exports`.
 
 ## Future hardening follow-up
 
