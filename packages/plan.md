@@ -2,7 +2,7 @@
 
 ## Scope
 
-- Status: closed. The published libraries in this folder, `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs`, have been migrated and validated for React 19.
+- Status: closed and published. The libraries in this folder, `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs`, have been migrated, validated for React 19, and released as `2.0.0`.
 - Primary objective: a stable React 19-compatible `@velgrim/rxjs` foundation for Fixture Manager. Latest dependency versions are useful only when they support that objective without adding unnecessary failure sources.
 - Use `pnpm` only for installs, updates, lockfile generation, and scripts.
 - Treat `latest stable` as the registry `latest` dist-tag returned by `pnpm view`, not `next`, `alpha`, `beta`, `canary`, or package-specific prerelease tags.
@@ -35,9 +35,8 @@
 - Root `pnpm-workspace.yaml` and root `pnpm-lock.yaml` exist.
 - Package-local lockfiles were removed.
 - `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs` use React 19-compatible dependencies and React peer range `^18.3.1 || ^19.0.0`.
-- The migrated package source has been version-bumped for the planned semver-major release: `@velgrim/testing@2.0.0`, `@velgrim/core@2.0.0`, and `@velgrim/rxjs@2.0.0`.
-- The packages have not been published. `npm whoami` currently fails with `ENEEDAUTH` on this machine.
-- npm `latest` is still the August 2022 React 18-era publish, with React `^18.0.0` peer ranges and old dependencies. The React 19 migration, Vite validation, core browser fix, and `2.0.0` release-prep version bump are currently in git only.
+- The migrated package source has been version-bumped and published as `@velgrim/testing@2.0.0`, `@velgrim/core@2.0.0`, and `@velgrim/rxjs@2.0.0`.
+- npm `latest` now resolves to the `2.0.0` React 19-compatible releases.
 - `@velgrim/testing` no longer uses legacy React DOM test APIs.
 - TypeScript configs use `"jsx": "react-jsx"`.
 - `@velgrim/core` has real build/typecheck scripts and no longer depends on `uuid`.
@@ -65,27 +64,23 @@ No evidence currently justifies:
 - package `exports` modernization
 - `useSyncExternalStore` migration
 
-## Publish next
+## Published release
 
-Before relying on these packages outside the workspace, publish the migrated package sources.
+The migrated package sources have been published and can now be consumed outside the workspace.
 
 Conservative semver path:
 
-- `@velgrim/testing@2.0.0` completed locally
-- `@velgrim/core@2.0.0` completed locally
-- `@velgrim/rxjs@2.0.0` completed locally
+- `@velgrim/testing@2.0.0` published
+- `@velgrim/core@2.0.0` published
+- `@velgrim/rxjs@2.0.0` published
 
 Reason:
 
-- The published npm `latest` packages are still the old August 2022 React 18-era versions.
+- The previously published npm `latest` packages were August 2022 React 18-era versions.
 - The local React peer range is now `^18.3.1 || ^19.0.0`, which excludes React 18.2 and is therefore semver-major for consumers pinned below React 18.3.
-- The publish should carry the React 19 dependency migration, the Vite/browser consumption fix, and the validated workspace package behavior.
+- The release carries the React 19 dependency migration, the Vite/browser consumption fix, and the validated workspace package behavior.
 
-Current blocker:
-
-- `npm whoami` returns `ENEEDAUTH`; authenticate this machine or publish from a trusted release environment before running the publish commands.
-
-Publish order:
+Publish order used:
 
 1. `@velgrim/testing`
 2. `@velgrim/core`
