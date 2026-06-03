@@ -18,10 +18,11 @@ Validation passed:
 - `pnpm dlx pnpm@11.5.1 build`
 
 Next:
-- Commit and push the validated library migration.
-- Migrate `examples/shopping-cart` separately after this commit: switch it to workspace package references, React 19, and a modern build toolchain or webpack 5.
+- Do not continue execution from the plan until the next explicit instruction.
+- Migrate `examples/shopping-cart` separately with Vite, not webpack 5. The example should validate package consumption, not preserve obsolete CRA/webpack 4 app tooling.
+- Prove the React 19 package surface in Fixture Manager before changing package `exports` or runtime semantics.
 
 High-leverage decisions:
-- Choose the example app migration path: replace the copied CRA/webpack 4 toolchain with a modern app tool, or preserve the current structure with a webpack 5 migration.
-- Choose package output strategy before adding `exports`: CommonJS-only with local/platform replacements, dual ESM/CJS, or ESM-only major release.
-- Decide whether the future `@velgrim/rxjs` runtime semantics audit should adopt `useSyncExternalStore` for `RxObservable.useState()` snapshots or keep the current event/store model.
+- Example app path decided: replace CRA/webpack 4 with Vite.
+- Package output decision deferred: preferred eventual direction is dual ESM/CJS, but wait to add `exports` until Fixture Manager successfully consumes the migrated packages.
+- RxJS runtime audit deferred: trigger it only if Fixture Manager's normalized projection, selector hooks, or patch flow surfaces render/subscription issues. Evaluate `useSyncExternalStore` then; otherwise avoid runtime churn.
