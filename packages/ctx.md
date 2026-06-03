@@ -3,6 +3,8 @@ Status: React 19 migration closed; Velgrim React infrastructure is now in mainte
 Current context:
 - Root pnpm workspace remains at `C:\agentic\Velgrim-React` with `packageManager: pnpm@11.5.1`, one root `pnpm-lock.yaml`, and packages/examples included by `pnpm-workspace.yaml`.
 - `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs` remain on React 19 dev dependencies/types, React peer range `^18.3.1 || ^19.0.0`, TypeScript 5.9.3, Jest 30, and `jsx: react-jsx`.
+- The migrated package source has not been version-bumped or published. Local versions still match the old npm `latest` dist-tags: `@velgrim/testing@1.1.1`, `@velgrim/core@1.1.2`, and `@velgrim/rxjs@1.1.5`.
+- npm `latest` for those versions is still the August 2022 React 18-era publish, with React `^18.0.0` peer ranges and old dependencies. The React 19 migration, Vite validation, and core browser fix are currently in git only.
 - `examples/shopping-cart` was migrated from copied CRA/webpack 4 tooling to Vite 8 with React 19, workspace dependencies on `@velgrim/core` and `@velgrim/rxjs`, Vite dependency prebundling for the linked CommonJS workspace packages, and no package-local lockfile.
 - The obsolete `examples/shopping-cart/config` and `scripts/start.js` webpack stack was removed; the example now uses root `index.html`, `vite.config.ts`, `pnpm --filter shopping-cart start`, and `pnpm --filter shopping-cart build`.
 - Browser smoke testing at `http://127.0.0.1:3001/` caught two real package-consumption issues: Vite dev needed dependency prebundling for linked CJS packages, and `@velgrim/core` assumed a Node `process` global.
@@ -35,7 +37,9 @@ Validation passed:
 
 Next:
 - Do not continue execution from the plan until the next explicit instruction.
-- Use Fixture Manager as the next real consumer to prove the React 19 package surface and package-consumption behavior beyond the shopping-cart smoke.
+- Version-bump and publish the migrated packages before relying on them outside the workspace. Conservative semver path is a major release because the peer range now excludes React 18.2: `@velgrim/testing@2.0.0`, `@velgrim/core@2.0.0`, and `@velgrim/rxjs@2.0.0`.
+- Publish order: `@velgrim/testing`, then `@velgrim/core`, then `@velgrim/rxjs`.
+- After publish, use Fixture Manager as the next real consumer to prove the React 19 package surface and package-consumption behavior beyond the shopping-cart smoke.
 - Keep package output modernization deferred until Fixture Manager confirms actual consumer friction.
 
 High-leverage decisions:

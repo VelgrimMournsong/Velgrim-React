@@ -35,6 +35,8 @@
 - Root `pnpm-workspace.yaml` and root `pnpm-lock.yaml` exist.
 - Package-local lockfiles were removed.
 - `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs` use React 19-compatible dependencies and React peer range `^18.3.1 || ^19.0.0`.
+- The migrated package source has not been version-bumped or published. Local versions still match the old npm `latest` dist-tags: `@velgrim/testing@1.1.1`, `@velgrim/core@1.1.2`, and `@velgrim/rxjs@1.1.5`.
+- npm `latest` for those versions is still the August 2022 React 18-era publish, with React `^18.0.0` peer ranges and old dependencies. The React 19 migration, Vite validation, and core browser fix are currently in git only.
 - `@velgrim/testing` no longer uses legacy React DOM test APIs.
 - TypeScript configs use `"jsx": "react-jsx"`.
 - `@velgrim/core` has real build/typecheck scripts and no longer depends on `uuid`.
@@ -61,6 +63,33 @@ No evidence currently justifies:
 - dual ESM/CJS migration
 - package `exports` modernization
 - `useSyncExternalStore` migration
+
+## Publish next
+
+Before relying on these packages outside the workspace, version-bump and publish the migrated package sources.
+
+Conservative semver path:
+
+- `@velgrim/testing@2.0.0`
+- `@velgrim/core@2.0.0`
+- `@velgrim/rxjs@2.0.0`
+
+Reason:
+
+- The published npm `latest` packages are still the old August 2022 React 18-era versions.
+- The local React peer range is now `^18.3.1 || ^19.0.0`, which excludes React 18.2 and is therefore semver-major for consumers pinned below React 18.3.
+- The publish should carry the React 19 dependency migration, the Vite/browser consumption fix, and the validated workspace package behavior.
+
+Publish order:
+
+1. `@velgrim/testing`
+2. `@velgrim/core`
+3. `@velgrim/rxjs`
+
+After publish:
+
+- Use Fixture Manager as the next real consumer.
+- Keep package `exports` / dual ESM-CJS modernization deferred until Fixture Manager shows actual friction with the current CommonJS output.
 
 ## Target version snapshot
 
