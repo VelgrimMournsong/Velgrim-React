@@ -1,4 +1,3 @@
-import { act } from 'react-dom/test-utils';
 import { render, RenderResult } from '@testing-library/react';
 import {
     CElement,
@@ -44,15 +43,14 @@ export function testJsx<P>(element: ReactElement<P>, assert: (result: RenderResu
 export function testJsx(element: ReactElement[], assert: (result: RenderResult) => void): void;
 
 export function testJsx(jsx: JsxInput, assert: (result: RenderResult) => void): void {
-    let container: HTMLDivElement;
-    container = document.createElement('div');
-    document.body.appendChild(container);
+    const wrapper = render(jsx as any);
 
-    act(() => {
-        const wrapper = render(jsx as any);
+    try {
         assert(wrapper);
+    }
+    finally {
         wrapper.unmount();
-    });
+    }
 }
 
 /*

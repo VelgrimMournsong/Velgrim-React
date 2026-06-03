@@ -14,11 +14,10 @@ export function createJestConfig(
             '!src/**/*.d.ts'
         ],
         setupFiles: [
-            'react-app-polyfill/jsdom',
             '<rootDir>/config/jest/setupTests'
         ],
         setupFilesAfterEnv: [
-            // '@testing-library/jest-dom/extend-expect',
+            '@testing-library/jest-dom',
             '<rootDir>/config/jest/setupTestsAfterEnv'
         ],
         testMatch: [

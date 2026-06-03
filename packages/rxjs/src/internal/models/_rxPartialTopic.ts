@@ -13,6 +13,6 @@ export class _RxPartialTopic<T> implements RxPartialTopic<T> {
     }
 
     patch(partialValue: Partial<T>): void {
-        this.subject.next(_store.has(this.key) ? { ..._store.get(this.key), ...partialValue } : partialValue as T);
+        this.subject.next(_store.has(this.key) ? { ...(_store.get(this.key) as any), ...(partialValue as any) } : partialValue as T);
     }
 }

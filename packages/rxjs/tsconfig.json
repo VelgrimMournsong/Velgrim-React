@@ -6,8 +6,7 @@
         "downlevelIteration": true,
         "esModuleInterop": true,
         "experimentalDecorators": true,
-        // "jsx": "react-jsx",
-        "jsx": "preserve",
+        "jsx": "react-jsx",
         "lib": [
             "ESNext",
             "DOM"
@@ -24,6 +23,12 @@
         "target": "es6",
         "baseUrl": ".",
         "paths": {
+            "@velgrim/core": [
+                "../core/src"
+            ],
+            "@velgrim/core/*": [
+                "../core/src/*"
+            ]
 //            "@archspark/hooks": ["../../node_modules/@archspark/hooks"],
 //            "@archspark/util": ["../../node_modules/@archspark/util"]
         }

@@ -1,4 +1,4 @@
-import { DependencyList, useInsertionEffect } from 'react';
+import { DependencyList, useLayoutEffect } from 'react';
 import { Observable } from 'rxjs';
 import { _useLogger } from '../internal/hooks/_useLogger';
 import { SubscribeOptions } from '../types/subscribeOptions';
@@ -19,7 +19,7 @@ export function useSubscription<T>(
 ): void {
     const log = _useLogger();
 
-    useInsertionEffect(() => {
+    useLayoutEffect(() => {
         const label: string | undefined = (options as any)['label'];
         log.trace(`subscribing to event...${label ? ` (${label})` : ''}`);
         const subscription = observable.subscribe(options as any);

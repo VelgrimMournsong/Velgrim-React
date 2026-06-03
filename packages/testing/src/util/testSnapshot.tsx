@@ -1,4 +1,3 @@
-import { act } from 'react-dom/test-utils';
 import { render } from '@testing-library/react';
 import {
     CElement,
@@ -35,13 +34,12 @@ export function testSnapshot<P>(element: ReactElement<P>): void;
 export function testSnapshot(element: ReactElement[]): void;
 
 export function testSnapshot(jsx: Jsx): void {
-    let container: HTMLDivElement;
-    container = document.createElement('div');
-    document.body.appendChild(container);
+    const wrapper = render(jsx as any);
 
-    act(() => {
-        const wrapper = render(jsx as any);
+    try {
         expect(wrapper.baseElement).toMatchSnapshot();
+    }
+    finally {
         wrapper.unmount();
-    });
+    }
 }

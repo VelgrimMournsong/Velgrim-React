@@ -1,0 +1,10 @@
+packages:
+  - "packages/*"
+  - "examples/*"
+overrides:
+  react-error-overlay: 6.0.9
+allowBuilds:
+  core-js: true
+  ejs: true
+  es5-ext: true
+  unrs-resolver: true

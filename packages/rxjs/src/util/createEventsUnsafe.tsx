@@ -25,11 +25,11 @@ export function createEventsUnsafe<TEvents = any>(
  * with the Context Provider that contains the events object.
  * The useEvents hook will only work inside the tree of a component wrapped using WithEvents.
  */
-export function createEventsUnsafe<TEvents = any, TState = { [event in keyof TEvents]: any }>(
+export function createEventsUnsafe<TEvents = any, TState extends object = { [event in keyof TEvents]: any }>(
     initialState: TState
 ): [() => RxEventsContext<TEvents>, RxEventsProvider];
 
-export function createEventsUnsafe<TEvents = any, TState = { [event in keyof TEvents]: any }>(
+export function createEventsUnsafe<TEvents = any, TState extends object = { [event in keyof TEvents]: any }>(
     p1: (keyof TEvents)[] | TState
 ): [() => RxEventsContext<TEvents>, RxEventsProvider] {
     const context = createDefaultContext<RxEventsContext<TEvents>>();

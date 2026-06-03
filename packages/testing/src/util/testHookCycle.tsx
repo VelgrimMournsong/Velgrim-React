@@ -1,7 +1,6 @@
 // TODO: delete, this doesn't offer the utility I was hoping to achieve
-import { act } from 'react-dom/test-utils';
-import { render, unmountComponentAtNode } from 'react-dom';
 import { FC } from 'react';
+import { render, RenderResult } from '@testing-library/react';
 
 export interface TestHookRef {
     useHook(): void;
@@ -17,29 +16,30 @@ export interface TestHookCycleHandle {
 }
 
 export function testHookCycle(Component: FC, fn: (ctx: TestHookCycleContext) => void): TestHookCycleHandle {
-    let container: HTMLDivElement;
-    container = document.createElement('div');
-    document.body.appendChild(container);
+    let wrapper: RenderResult | undefined;
+    let i = 0;
 
-    act(() => {
-        let i = 0;
-
-        const Wrapper = () => {
-            console.log(`rendering (${i++})...`);
-            return <Component />;
-        };
-
-        const renderHook = (callback?: () => void) => render(<Wrapper />, container, callback);
-
-        fn({
-            render: renderHook
-        });
-    });
-
-    const unmount = () => {
-        unmountComponentAtNode(container);
-        container.remove();
+    const Wrapper = () => {
+        console.log(`rendering (${i++})...`);
+        return <Component />;
     };
 
-    return { unmount };
+    const renderHook = (callback?: () => void) => {
+        if (wrapper) {
+            wrapper.rerender(<Wrapper />);
+        }
+        else {
+            wrapper = render(<Wrapper />);
+        }
+
+        callback?.();
+    };
+
+    fn({
+        render: renderHook
+    });
+
+    return {
+        unmount: () => wrapper?.unmount()
+    };
 }

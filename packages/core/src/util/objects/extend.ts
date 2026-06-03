@@ -1,8 +1,8 @@
 import { notNullOrUndefined } from '../guard';
 import { cast } from './cast';
 
-export function extend<T1>(t1: T1): <T2>(t2: T2) => T1 & T2 {
-    return <T2>(t2: T2) => {
+export function extend<T1 extends object>(t1: T1): <T2 extends object>(t2: T2) => T1 & T2 {
+    return <T2 extends object>(t2: T2) => {
         notNullOrUndefined(t1);
         notNullOrUndefined(t2);
 

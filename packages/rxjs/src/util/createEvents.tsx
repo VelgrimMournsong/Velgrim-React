@@ -13,7 +13,7 @@ import { RxEventsProvider } from '../types/rxEventsProvider';
  * with the Context Provider that contains the events object.
  * The useEvents hook will only work inside the tree of a component wrapped using WithEvents.
  */
-export function createEvents<TEvents>(
+export function createEvents<TEvents extends object>(
     configureEvents: (rx: RxEventFactory) => TEvents
 ): [() => RxEventsContext<TEvents>, RxEventsProvider] {
     const context = createDefaultContext<RxEventsContext<TEvents>>();

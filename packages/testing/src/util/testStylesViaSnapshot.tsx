@@ -1,17 +1,15 @@
-import { act } from 'react-dom/test-utils';
 import { Global, SerializedStyles } from '@emotion/react';
 import { render } from '@testing-library/react';
 
 export function testStylesViaSnapshot(styles: string | SerializedStyles): void {
-    let container: HTMLDivElement;
-    container = document.createElement('div');
-    document.body.appendChild(container);
+    const wrapper = render(<Global styles={styles} />);
 
-    act(() => {
-        const wrapper = render(<Global styles={styles} />);
+    try {
         expect(wrapper.baseElement).toMatchSnapshot();
+    }
+    finally {
         wrapper.unmount();
-    });
+    }
 }
 
 // import React from 'react';

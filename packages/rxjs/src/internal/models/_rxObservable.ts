@@ -5,9 +5,10 @@ import { _store } from '../global/_store';
 import { _useLogger } from '../hooks/_useLogger';
 import { _usePipe } from '../hooks/_usePipe';
 import { SubscribeOptions } from '../../types/subscribeOptions';
-import { DependencyList } from 'react';
+import { DependencyList, useRef } from 'react';
 import { useSubscription } from '../../hooks/useSubscription';
 import { areCongruent } from '@velgrim/core';
+import { createImmutableClone } from '@velgrim/core';
 
 export class _RxObservable<T> implements RxObservable<T> {
     constructor(
@@ -37,9 +38,16 @@ export class _RxObservable<T> implements RxObservable<T> {
 
         const log = _useLogger();
         const rerender = useRerender();
+        const renderedValue = useRef(_store.get(key));
+
+        renderedValue.current = _store.get(key);
 
         useSubscription(this.observable, (value: T) => {
-            if (!areCongruent(value, _store.get(key))) {
+            const nextValue = createImmutableClone(value);
+
+            if (!areCongruent(nextValue, renderedValue.current)) {
+                _store.set(key, nextValue);
+                renderedValue.current = nextValue;
                 rerender();
             }
             else {

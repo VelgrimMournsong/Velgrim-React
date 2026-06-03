@@ -1,6 +1,5 @@
 // TODO: retire this in favor of testJsx()?
-import { act } from 'react-dom/test-utils';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { render } from '@testing-library/react';
 import {
     CElement,
     Component,
@@ -42,10 +41,12 @@ export function testRender<P>(element: ReactElement<P>, callback?: () => void): 
 export function testRender(element: ReactElement[], callback?: () => void): void;
 
 export function testRender(jsx: JsxInput, callback?: () => void): void {
-    let container: HTMLDivElement;
-    container = document.createElement('div');
-    document.body.appendChild(container);
-    act(() => { render(jsx as any, container, callback); });
-    unmountComponentAtNode(container);
-    container.remove();
+    const wrapper = render(jsx as any);
+
+    try {
+        callback?.();
+    }
+    finally {
+        wrapper.unmount();
+    }
 }

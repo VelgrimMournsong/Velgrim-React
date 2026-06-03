@@ -14,7 +14,7 @@ export function _usePipe<T>(
     dependencies: DependencyList | undefined
 ): RxObservable<T> {
     const key = useId();
-    const combinedOperator = useMemo(() => _reduceOperators(operators), dependencies);
+    const combinedOperator = useMemo(() => _reduceOperators(operators), dependencies ?? []);
 
     useFunctionOnce(() => {
         const subject = new Subject<any>();

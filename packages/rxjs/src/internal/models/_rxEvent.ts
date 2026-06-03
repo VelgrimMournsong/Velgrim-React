@@ -20,7 +20,7 @@ export class _RxEvent<T> extends _RxObservable<T> implements RxEvent<T> {
     }
 
     patch(partialValue: Partial<T>): void {
-        this.subject.next(_store.has(this.key) ? { ..._store.get(this.key), ...partialValue } : partialValue as T);
+        this.subject.next(_store.has(this.key) ? { ...(_store.get(this.key) as any), ...(partialValue as any) } : partialValue as T);
     }
 
     usePartial(): RxPartialTopic<T> {
@@ -28,7 +28,7 @@ export class _RxEvent<T> extends _RxObservable<T> implements RxEvent<T> {
         const { key, subject } = this;
 
         useSubscription(partialSubject, _value => {
-            subject.next(_store.has(key) ? { ..._store.get(key), ..._value } : _value as T);
+            subject.next(_store.has(key) ? { ...(_store.get(key) as any), ...(_value as any) } : _value as T);
         }, []);
 
         return new _RxPartialTopic(key, partialSubject);

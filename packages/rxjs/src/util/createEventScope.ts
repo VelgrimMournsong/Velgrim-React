@@ -16,7 +16,7 @@ const eventScopes = new Map<string, any>();
  * @param configureEvents
  * @return useEvents() hook
  */
-export function createEventScope<TEvents>(
+export function createEventScope<TEvents extends object>(
     configureEvents: (rx: RxEventFactory) => TEvents
 ): () => RxEventsContext<TEvents> {
     const id = createUniqueId();
