@@ -1,47 +1,40 @@
-Status: React 19 migration closed; Velgrim React infrastructure is now in maintenance / consumer-validation mode.
+Status: React 19 migration closed; release-prep version bump completed; npm publish is blocked by missing npm auth on this machine.
 
 Current context:
-- Root pnpm workspace remains at `C:\agentic\Velgrim-React` with `packageManager: pnpm@11.5.1`, one root `pnpm-lock.yaml`, and packages/examples included by `pnpm-workspace.yaml`.
-- `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs` remain on React 19 dev dependencies/types, React peer range `^18.3.1 || ^19.0.0`, TypeScript 5.9.3, Jest 30, and `jsx: react-jsx`.
-- The migrated package source has not been version-bumped or published. Local versions still match the old npm `latest` dist-tags: `@velgrim/testing@1.1.1`, `@velgrim/core@1.1.2`, and `@velgrim/rxjs@1.1.5`.
-- npm `latest` for those versions is still the August 2022 React 18-era publish, with React `^18.0.0` peer ranges and old dependencies. The React 19 migration, Vite validation, and core browser fix are currently in git only.
-- `examples/shopping-cart` was migrated from copied CRA/webpack 4 tooling to Vite 8 with React 19, workspace dependencies on `@velgrim/core` and `@velgrim/rxjs`, Vite dependency prebundling for the linked CommonJS workspace packages, and no package-local lockfile.
-- The obsolete `examples/shopping-cart/config` and `scripts/start.js` webpack stack was removed; the example now uses root `index.html`, `vite.config.ts`, `pnpm --filter shopping-cart start`, and `pnpm --filter shopping-cart build`.
-- Browser smoke testing at `http://127.0.0.1:3001/` caught two real package-consumption issues: Vite dev needed dependency prebundling for linked CJS packages, and `@velgrim/core` assumed a Node `process` global.
-- `@velgrim/core` `Environment` now reads through a guarded environment object so browser consumers do not need a `process.env` bundler shim, with regression coverage for loading without `globalThis.process`.
-- Shopping-cart runtime smoke passed after the fixes: initial render had no fresh console errors, and clicking `Add to cart` updated the cart and total through the RxJS event flow.
+- Root pnpm workspace is `C:\agentic\Velgrim-React` with `packageManager: pnpm@11.5.1`, one root `pnpm-lock.yaml`, and packages/examples included by `pnpm-workspace.yaml`.
+- `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs` are migrated and validated for React 19 with React peer range `^18.3.1 || ^19.0.0`, TypeScript 5.9.3, Jest 30, and `jsx: react-jsx`.
+- Package manifests have been bumped for the planned semver-major release:
+  - `@velgrim/testing@2.0.0`
+  - `@velgrim/core@2.0.0`
+  - `@velgrim/rxjs@2.0.0`
+- Registry checks still show only the old published versions: `@velgrim/testing` through `1.1.1`, `@velgrim/core` through `1.1.2`, and `@velgrim/rxjs` through `1.1.5`.
+- `npm whoami` fails with `ENEEDAUTH`, so the packages have not been published from this machine.
+- `pnpm pack --dry-run` for all three packages confirmed the tarballs include built `dist` outputs.
+- `examples/shopping-cart` remains migrated to Vite 8 with React 19, workspace dependencies on `@velgrim/core` and `@velgrim/rxjs`, and Vite dependency prebundling for the linked CommonJS workspace packages.
+- `@velgrim/core` no longer assumes a Node `process` global during `Environment` module evaluation, so browser consumers do not need a `process.env` bundler shim.
 
-Shopping-cart validated:
-- React 19 runtime compatibility.
-- Browser consumption.
-- Workspace package consumption.
-- Vite consumption.
-- `@velgrim/core` and `@velgrim/rxjs` consumption together in a real app.
-
-Known consumer issue discovered:
-- `@velgrim/core` had a `process.env` module-load assumption that package tests missed and Vite/browser consumption exposed. This is fixed.
+Validation passed after the version bump:
+- `pnpm dlx pnpm@11.5.1 install --lockfile-only`
+- `pnpm dlx pnpm@11.5.1 install --frozen-lockfile`
+- `pnpm dlx pnpm@11.5.1 test`
+- `pnpm dlx pnpm@11.5.1 typecheck`
+- `pnpm dlx pnpm@11.5.1 build`
+- `pnpm dlx pnpm@11.5.1 --filter @velgrim/testing pack --dry-run`
+- `pnpm dlx pnpm@11.5.1 --filter @velgrim/core pack --dry-run`
+- `pnpm dlx pnpm@11.5.1 --filter @velgrim/rxjs pack --dry-run`
 
 No evidence currently justifies:
 - Dual ESM/CJS migration.
 - Package `exports` modernization.
 - `useSyncExternalStore` migration.
 
-Validation passed:
-- `pnpm dlx pnpm@11.5.1 install --frozen-lockfile`
-- `pnpm dlx pnpm@11.5.1 test`
-- `pnpm dlx pnpm@11.5.1 typecheck`
-- `pnpm dlx pnpm@11.5.1 build`
-- `pnpm dlx pnpm@11.5.1 --filter shopping-cart typecheck`
-- `pnpm dlx pnpm@11.5.1 --filter shopping-cart build`
-- Browser smoke on `http://127.0.0.1:3001/`: heading/buttons rendered, no fresh console errors, add-to-cart updated cart state and total.
-
 Next:
-- Do not continue execution from the plan until the next explicit instruction.
-- Version-bump and publish the migrated packages before relying on them outside the workspace. Conservative semver path is a major release because the peer range now excludes React 18.2: `@velgrim/testing@2.0.0`, `@velgrim/core@2.0.0`, and `@velgrim/rxjs@2.0.0`.
-- Publish order: `@velgrim/testing`, then `@velgrim/core`, then `@velgrim/rxjs`.
+- Commit and push the `2.0.0` release-prep version bump.
+- Log into npm or provide publish credentials, then publish in order: `@velgrim/testing`, `@velgrim/core`, `@velgrim/rxjs`.
 - After publish, use Fixture Manager as the next real consumer to prove the React 19 package surface and package-consumption behavior beyond the shopping-cart smoke.
 - Keep package output modernization deferred until Fixture Manager confirms actual consumer friction.
 
 High-leverage decisions:
-- Package output remains an evidence-triggered decision: Vite can consume the current CommonJS packages with prebundling, and Fixture Manager should decide whether dual ESM/CJS with explicit `exports` is actually needed.
+- Whether to authenticate this machine for npm publishing now, or publish from another trusted release environment.
+- Package output remains evidence-triggered: Vite can consume the current CommonJS packages with prebundling, and Fixture Manager should decide whether dual ESM/CJS with explicit `exports` is actually needed.
 - The RxJS runtime audit remains evidence-triggered: the current implementation survived React 19, StrictMode package tests, and a real browser consumer. Evaluate `useSyncExternalStore` only if Fixture Manager's normalized projection, selector hooks, or patch flow surfaces render/subscription issues.
