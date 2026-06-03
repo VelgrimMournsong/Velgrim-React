@@ -2,11 +2,11 @@
 
 ## Scope
 
-- Migrate the published libraries in this folder: `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs`.
+- Status: closed. The published libraries in this folder, `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs`, have been migrated and validated for React 19.
 - Primary objective: a stable React 19-compatible `@velgrim/rxjs` foundation for Fixture Manager. Latest dependency versions are useful only when they support that objective without adding unnecessary failure sources.
 - Use `pnpm` only for installs, updates, lockfile generation, and scripts.
 - Treat `latest stable` as the registry `latest` dist-tag returned by `pnpm view`, not `next`, `alpha`, `beta`, `canary`, or package-specific prerelease tags.
-- Include `examples/shopping-cart` only after the packages pass. It is an app-like integration target and has a larger webpack 4 / CRA-style toolchain migration.
+- `examples/shopping-cart` has been migrated and validated as the first real consumer.
 
 ## Execution guardrails and priorities
 
@@ -31,6 +31,7 @@
 
 - Commit `10b6a2f` completed and pushed the React 19 library migration.
 - The follow-up `examples/shopping-cart` migration has now been completed with Vite instead of webpack 5.
+- The React 19 migration is closed. The project is now in maintenance / consumer-validation mode.
 - Root `pnpm-workspace.yaml` and root `pnpm-lock.yaml` exist.
 - Package-local lockfiles were removed.
 - `@velgrim/testing`, `@velgrim/core`, and `@velgrim/rxjs` use React 19-compatible dependencies and React peer range `^18.3.1 || ^19.0.0`.
@@ -42,6 +43,24 @@
 - `@velgrim/core` no longer assumes a Node `process` global during `Environment` module evaluation, which was required for browser package consumption through Vite.
 - Root `pnpm test`, `pnpm typecheck`, `pnpm build`, and `pnpm --filter shopping-cart build` passed through `pnpm@11.5.1`.
 - Browser smoke for `examples/shopping-cart` passed on `http://127.0.0.1:3001/`: initial render had no fresh console errors and add-to-cart updated cart state.
+
+Shopping-cart validated:
+
+- React 19 runtime compatibility.
+- Browser consumption.
+- Workspace package consumption.
+- Vite consumption.
+- `@velgrim/core` and `@velgrim/rxjs` consumption together in a real app.
+
+Known consumer issue discovered:
+
+- `@velgrim/core` had a `process.env` module-load assumption that package tests missed and Vite/browser consumption exposed. This is fixed.
+
+No evidence currently justifies:
+
+- dual ESM/CJS migration
+- package `exports` modernization
+- `useSyncExternalStore` migration
 
 ## Target version snapshot
 
@@ -400,7 +419,7 @@ Next consumer follow-up:
 
 ## Future hardening follow-up
 
-After React 19 is green, defer a separate `@velgrim/rxjs` runtime semantics audit until Fixture Manager provides evidence that it is needed. Keep it out of this migration unless it uncovers a React 19 blocker.
+React 19 is closed. Defer a separate `@velgrim/rxjs` runtime semantics audit until Fixture Manager provides evidence that it is needed.
 
 Focus areas:
 
@@ -416,7 +435,7 @@ Trigger evidence:
 - selector hooks
 - patch flow
 
-If those Fixture Manager paths surface render/subscription issues, evaluate `useSyncExternalStore`. Otherwise do not churn the runtime.
+If those Fixture Manager paths surface render/subscription issues, evaluate `useSyncExternalStore`. Otherwise do not churn the runtime; the current implementation has survived React 19, StrictMode package tests, and a real browser consumer.
 
 ## Completion criteria
 

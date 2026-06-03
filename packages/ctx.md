@@ -1,4 +1,4 @@
-Status: Shopping-cart Vite migration completed and validated after the React 19 library migration.
+Status: React 19 migration closed; Velgrim React infrastructure is now in maintenance / consumer-validation mode.
 
 Current context:
 - Root pnpm workspace remains at `C:\agentic\Velgrim-React` with `packageManager: pnpm@11.5.1`, one root `pnpm-lock.yaml`, and packages/examples included by `pnpm-workspace.yaml`.
@@ -8,6 +8,21 @@ Current context:
 - Browser smoke testing at `http://127.0.0.1:3001/` caught two real package-consumption issues: Vite dev needed dependency prebundling for linked CJS packages, and `@velgrim/core` assumed a Node `process` global.
 - `@velgrim/core` `Environment` now reads through a guarded environment object so browser consumers do not need a `process.env` bundler shim, with regression coverage for loading without `globalThis.process`.
 - Shopping-cart runtime smoke passed after the fixes: initial render had no fresh console errors, and clicking `Add to cart` updated the cart and total through the RxJS event flow.
+
+Shopping-cart validated:
+- React 19 runtime compatibility.
+- Browser consumption.
+- Workspace package consumption.
+- Vite consumption.
+- `@velgrim/core` and `@velgrim/rxjs` consumption together in a real app.
+
+Known consumer issue discovered:
+- `@velgrim/core` had a `process.env` module-load assumption that package tests missed and Vite/browser consumption exposed. This is fixed.
+
+No evidence currently justifies:
+- Dual ESM/CJS migration.
+- Package `exports` modernization.
+- `useSyncExternalStore` migration.
 
 Validation passed:
 - `pnpm dlx pnpm@11.5.1 install --frozen-lockfile`
@@ -21,9 +36,8 @@ Validation passed:
 Next:
 - Do not continue execution from the plan until the next explicit instruction.
 - Use Fixture Manager as the next real consumer to prove the React 19 package surface and package-consumption behavior beyond the shopping-cart smoke.
-- Keep the package `exports` / dual ESM-CJS output work deferred until Fixture Manager confirms the remaining consumer shape and failure modes.
+- Keep package output modernization deferred until Fixture Manager confirms actual consumer friction.
 
 High-leverage decisions:
-- Package output is now the main decision: Vite can consume the current CommonJS packages with prebundling, but broader consumers may justify dual ESM/CJS with explicit `exports`.
-- Fixture Manager should decide whether output modernization is required now or can remain a separate packaging phase.
-- The RxJS runtime audit remains evidence-triggered: evaluate `useSyncExternalStore` only if Fixture Manager's normalized projection, selector hooks, or patch flow surfaces render/subscription issues.
+- Package output remains an evidence-triggered decision: Vite can consume the current CommonJS packages with prebundling, and Fixture Manager should decide whether dual ESM/CJS with explicit `exports` is actually needed.
+- The RxJS runtime audit remains evidence-triggered: the current implementation survived React 19, StrictMode package tests, and a real browser consumer. Evaluate `useSyncExternalStore` only if Fixture Manager's normalized projection, selector hooks, or patch flow surfaces render/subscription issues.
